@@ -119,4 +119,11 @@ python -m ruff check .
 python -m pytest -q
 ```
 
+The [regression vectors](tests/regression_vectors/) exercise label precedence and
+overrides, release metadata boundaries, deterministic ordering, Markdown
+escaping, and duplicate handling. Each vector supplies synthetic export rows
+and hand-written expectations that the CLI tests check offline. Run the corpus
+with `python -m pytest -q tests/test_regression_vectors.py`, or add
+`-k <scenario-slug>` to select a single vector.
+
 Licensed under the [MIT License](LICENSE).

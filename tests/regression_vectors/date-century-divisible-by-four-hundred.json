@@ -1,0 +1,10 @@
+{
+  "title": "A century divisible by 400 still accepts leap day",
+  "metadata": {"version": "calendar-preview", "date": "2000-02-29"},
+  "rows": [{"number": 40, "title": "Add a month view", "labels": ["feat"]}],
+  "expected": {
+    "sections": [["feat", [40]]],
+    "release": {"version": "calendar-preview", "date": "2000-02-29"},
+    "markdown": ["\nReleased: 2000-02-29\n"]
+  }
+}
