@@ -1,0 +1,14 @@
+{
+  "title": "An earlier CLI release date changes metadata, not PR selection",
+  "metadata": {"version": "winter-preview", "date": "2042-01-01"},
+  "args": ["--date", "2041-12-31"],
+  "rows": [
+    {"number": 99, "title": "Repair the release header", "labels": ["fix"]},
+    {"number": 101, "title": "Add a release preview", "labels": ["feat"]}
+  ],
+  "expected": {
+    "sections": [["feat", [101]], ["fix", [99]]],
+    "release": {"version": "winter-preview", "date": "2041-12-31"},
+    "markdown": ["# Release winter-preview\n\nReleased: 2041-12-31\n"]
+  }
+}
