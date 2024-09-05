@@ -1,0 +1,10 @@
+{
+  "title": "The last day of year 9999 survives release rendering",
+  "metadata": {"date": "9999-12-31", "summary": "Calendar range preview."},
+  "rows": [{"number": 902, "title": "Extend the calendar example", "labels": ["enhancement"]}],
+  "expected": {
+    "sections": [["feat", [902]]],
+    "release": {"version": null, "date": "9999-12-31", "summary": "Calendar range preview."},
+    "markdown": ["\nReleased: 9999-12-31\n\nSummary: Calendar range preview.\n"]
+  }
+}
