@@ -1,0 +1,6 @@
+{
+  "title": "A five-digit release year is outside the supported range",
+  "args": ["--date", "10000-01-01"],
+  "rows": [{"number": 901, "title": "Document calendar ranges"}],
+  "expected": {"error": "date must be a valid calendar date in YYYY-MM-DD format"}
+}
