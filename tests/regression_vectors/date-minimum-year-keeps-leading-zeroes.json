@@ -1,0 +1,10 @@
+{
+  "title": "The minimum calendar year retains its four-digit form",
+  "args": ["--date", "0001-01-01"],
+  "rows": [{"number": 3, "title": "Add a historical calendar example"}],
+  "expected": {
+    "sections": [["other", [3]]],
+    "release": {"version": null, "date": "0001-01-01"},
+    "markdown": ["\nReleased: 0001-01-01\n"]
+  }
+}
