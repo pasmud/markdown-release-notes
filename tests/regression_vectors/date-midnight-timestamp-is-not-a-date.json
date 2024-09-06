@@ -1,0 +1,6 @@
+{
+  "title": "A UTC midnight timestamp is not a release calendar date",
+  "metadata": {"date": "2040-01-01T00:00:00Z"},
+  "rows": [{"number": 141, "title": "Clarify the release calendar", "labels": ["docs"]}],
+  "expected": {"error": "metadata.json': date must be a valid calendar date in YYYY-MM-DD format"}
+}
