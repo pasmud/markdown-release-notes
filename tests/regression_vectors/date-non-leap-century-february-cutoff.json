@@ -1,0 +1,7 @@
+{
+  "title": "February stops at day 28 in a non-leap century",
+  "metadata": {"date": "2100-02-28"},
+  "args": ["--date", "2100-02-29"],
+  "rows": [{"number": 41, "title": "Repair a month boundary", "labels": ["fix"]}],
+  "expected": {"error": "date must be a valid calendar date in YYYY-MM-DD format"}
+}
