@@ -1,0 +1,7 @@
+{
+  "title": "A valid CLI date cannot rescue year zero in metadata",
+  "metadata": {"date": "0000-12-31"},
+  "args": ["--date", "0001-01-01"],
+  "rows": [{"number": 6, "title": "Explain the historical calendar"}],
+  "expected": {"error": "metadata.json': date must be a valid calendar date in YYYY-MM-DD format"}
+}
