@@ -1,0 +1,8 @@
+{
+  "title": "Different spellings of a valid URL are conflicting input",
+  "rows": [
+    {"number": 25, "title": "Link the badge guide", "url": "https://example.invalid/guide/~badge"},
+    {"number": 25, "title": "Link the badge guide", "url": "https://example.invalid/guide/%7Ebadge"}
+  ],
+  "expected": {"error": "row 2: conflicting records for PR #25"}
+}
