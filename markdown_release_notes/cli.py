@@ -5,7 +5,7 @@ import sys
 from pathlib import Path
 
 from .export import parse_export
-from .input import load_json
+from .input import load_json, parse_labels
 from .release import DEFAULT_LABELS, parse_label_map, parse_release
 from .render import render_notes
 
@@ -17,12 +17,22 @@ def main(argv: list[str] | None = None) -> int:
     )
     parser.add_argument("export", type=Path, help="UTF-8 JSON export file")
     parser.add_argument("--labels", type=Path, metavar="FILE", help="JSON label mapping overrides")
+    parser.add_argument(
+        "--include-label", action="append", default=[], metavar="LABEL",
+        help="keep PRs with any of these labels (repeatable)",
+    )
+    parser.add_argument(
+        "--exclude-label", action="append", default=[], metavar="LABEL",
+        help="drop PRs with any of these labels (repeatable; overrides inclusion)",
+    )
     parser.add_argument("--version", help="release identifier to show in the heading")
     parser.add_argument("--date", metavar="YYYY-MM-DD", help="release date to show below the heading")
     args = parser.parse_args(argv)
 
     try:
         release = parse_release(args.version, args.date)
+        included = parse_labels(args.include_label, "--include-label")
+        excluded = parse_labels(args.exclude_label, "--exclude-label")
     except ValueError as exc:
         parser.error(str(exc))
 
@@ -38,5 +48,11 @@ def main(argv: list[str] | None = None) -> int:
     except (OSError, ValueError) as exc:
         parser.exit(2, f"{parser.prog}: {str(args.export)!r}: {exc}\n")
 
-    sys.stdout.buffer.write(render_notes(records, release, label_map).encode("utf-8"))
+    selected = [
+        record for record in records
+        if (not included or not record.labels.isdisjoint(included))
+        and record.labels.isdisjoint(excluded)
+    ]
+    notes = render_notes(selected, release, label_map, no_matches=bool(records) and not selected)
+    sys.stdout.buffer.write(notes.encode("utf-8"))
     return 0

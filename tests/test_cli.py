@@ -72,3 +72,57 @@ def test_invalid_cli_date_is_a_usage_error():
     assert proc.returncode == 2
     assert proc.stdout == b""
     assert b"date must be a valid calendar date in YYYY-MM-DD format" in proc.stderr
+
+
+def test_label_filters_are_repeatable_and_exclusions_win():
+    proc = run_cli(
+        EXAMPLES / "merged-prs.json", "--labels", EXAMPLES / "labels.json",
+        "--include-label", "  TYPE:FEATURE ", "--include-label", "Docs",
+        "--exclude-label", "BUGFIX", "--exclude-label", "change:incompatible",
+    )
+    assert proc.returncode == 0, proc.stderr
+    assert proc.stdout.decode() == (
+        "# Release notes\n\n"
+        "## Features\n\n- \\#206 — Add a compact summary\n\n"
+        "## Other changes\n\n"
+        "- [#205](<https://example.invalid/demo/pulls/205>) — Document the sample workspace\n"
+    )
+
+
+def test_exclude_only_keeps_unlabeled_prs(tmp_path):
+    export = tmp_path / "export.json"
+    export.write_text(
+        '[{"number": 1, "title": "Visible"}, '
+        '{"number": 2, "title": "Hidden", "labels": ["Internal  only"]}]',
+        encoding="utf-8",
+    )
+    proc = run_cli(export, "--exclude-label", "internal only")
+    assert proc.returncode == 0, proc.stderr
+    assert proc.stdout.decode() == "# Release notes\n\n## Other changes\n\n- \\#1 — Visible\n"
+
+
+def test_label_filters_can_leave_no_matches():
+    proc = run_cli(EXAMPLES / "merged-prs.json", "--include-label", "unmatched")
+    assert proc.returncode == 0, proc.stderr
+    assert proc.stdout == b"# Release notes\n\nNo merged pull requests matched the label filters.\n"
+
+
+@pytest.mark.parametrize("option", ["--include-label", "--exclude-label"])
+def test_blank_filter_is_a_usage_error(option):
+    proc = run_cli(EXAMPLES / "merged-prs.json", option, "  ")
+    assert proc.returncode == 2
+    assert proc.stdout == b""
+    assert option.encode() + b"[0] must be a non-empty string" in proc.stderr
+
+
+def test_filtering_does_not_hide_conflicting_rows(tmp_path):
+    export = tmp_path / "export.json"
+    export.write_text(
+        '[{"number": 1, "title": "First", "labels": ["keep"]}, '
+        '{"number": 1, "title": "Conflicting"}]',
+        encoding="utf-8",
+    )
+    proc = run_cli(export, "--include-label", "keep")
+    assert proc.returncode == 2
+    assert proc.stdout == b""
+    assert b"row 2: conflicting records for PR #1" in proc.stderr

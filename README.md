@@ -49,6 +49,17 @@ Each PR goes in the first matching category below. Unlabeled or unmatched PRs go
 
 `--labels FILE` reads a UTF-8 JSON object. Each key replaces that category's default label list; omitted keys keep their defaults, and `[]` disables matching for that category. The only supported keys are `breaking`, `feat`, and `fix`. If a label appears in multiple categories, the same priority order applies regardless of key order in the file.
 
+## Filter by PR label
+
+Repeat `--include-label LABEL` to keep PRs matching **any** supplied label. Repeat `--exclude-label LABEL` to drop PRs matching any of those labels, even when an inclusion label matches. With no inclusion filter, unlabeled PRs are eligible too.
+
+```sh
+python -m markdown_release_notes examples/merged-prs.json \
+  --labels examples/labels.json --include-label 'type:feature' --exclude-label bugfix
+```
+
+Filters match actual PR labels with whitespace collapsed and case ignored, regardless of the category mapping. The entire export is validated and deduplicated before filtering. If filters remove every PR from a non-empty export, Markdown prints `No merged pull requests matched the label filters.`
+
 ## CLI output and errors
 
 - `--version VALUE` sets the heading to `Release VALUE`; it can be any non-empty identifier, not necessarily SemVer. With no version, the heading is `Release notes`.

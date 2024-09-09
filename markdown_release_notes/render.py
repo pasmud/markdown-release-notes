@@ -27,13 +27,18 @@ def render_notes(
     records: list[PullRequest],
     release: Release = DEFAULT_RELEASE,
     label_map: Mapping[str, frozenset[str]] = DEFAULT_LABELS,
+    *,
+    no_matches: bool = False,
 ) -> str:
     heading = f"Release {_escape(release.version)}" if release.version else "Release notes"
     blocks = [f"# {heading}"]
     if release.released_on:
         blocks.append(f"Released: {release.released_on.isoformat()}")
     if not records:
-        blocks.append("No merged pull requests.")
+        blocks.append(
+            "No merged pull requests matched the label filters."
+            if no_matches else "No merged pull requests."
+        )
     else:
         groups: dict[str, list[str]] = {key: [] for key, _ in SECTIONS}
         for row in sorted(records, key=lambda row: row.number, reverse=True):
