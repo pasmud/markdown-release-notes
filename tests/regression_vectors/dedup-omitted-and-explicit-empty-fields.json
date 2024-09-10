@@ -1,0 +1,11 @@
+{
+  "title": "Omitted optional fields equal empty labels and a null URL",
+  "rows": [
+    {"number": 22, "title": "Explain plain references", "url": null, "labels": []},
+    {"number": 22, "title": "Explain plain references"}
+  ],
+  "expected": {
+    "sections": [["other", [22]]],
+    "records": [{"number": 22, "title": "Explain plain references", "url": null, "labels": []}]
+  }
+}
