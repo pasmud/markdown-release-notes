@@ -1,0 +1,15 @@
+{
+  "title": "Three interleaved copies collapse to one linked PR",
+  "reorder": true,
+  "rows": [
+    {"number": 14, "title": "Add sample tabs", "url": "https://example.invalid/pulls/14", "labels": ["feat"]},
+    {"number": 8, "title": "Add sample bookmarks", "labels": ["feat"]},
+    {"number": 14, "title": "Add sample tabs", "url": "https://example.invalid/pulls/14", "labels": ["feat"]},
+    {"number": 12, "title": "Add sample anchors", "labels": ["feat"]},
+    {"number": 14, "title": "Add sample tabs", "url": "https://example.invalid/pulls/14", "labels": ["feat"]}
+  ],
+  "expected": {
+    "sections": [["feat", [14, 12, 8]]],
+    "markdown": ["## Features\n\n- [#14](<https://example.invalid/pulls/14>) — Add sample tabs\n- \\#12 — Add sample anchors\n- \\#8 — Add sample bookmarks\n"]
+  }
+}
