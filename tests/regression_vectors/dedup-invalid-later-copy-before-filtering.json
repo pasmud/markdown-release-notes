@@ -1,0 +1,10 @@
+{
+  "title": "A filter cannot conceal an invalid repeat of a PR number",
+  "args": ["--exclude-label", "internal"],
+  "rows": [
+    {"number": 81, "title": "Document internal presets", "labels": ["internal"]},
+    {"number": 83, "title": "Publish the external example", "labels": ["docs"]},
+    {"number": 81, "title": "Document internal presets", "labels": ["internal", " "]}
+  ],
+  "expected": {"error": "row 3: labels[1] must be a non-empty string"}
+}
