@@ -1,0 +1,8 @@
+{
+  "title": "Title case alone can make two rows for one PR conflict",
+  "rows": [
+    {"number": 75, "title": "Document the API", "labels": ["docs"]},
+    {"number": 75, "title": "Document the Api", "labels": ["DOCS"]}
+  ],
+  "expected": {"error": "row 2: conflicting records for PR #75"}
+}
