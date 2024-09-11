@@ -1,0 +1,9 @@
+{
+  "title": "Conflicting label sets still fail when both map to Features",
+  "rows": [
+    {"number": 49, "title": "Add a read-only preview", "labels": ["feat"]},
+    {"number": 50, "title": "Clarify preview options", "labels": ["docs"]},
+    {"number": 49, "title": "Add a read-only preview", "labels": ["feature"]}
+  ],
+  "expected": {"error": "row 3: conflicting records for PR #49"}
+}
