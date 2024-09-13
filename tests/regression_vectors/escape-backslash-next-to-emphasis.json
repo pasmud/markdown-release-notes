@@ -1,0 +1,8 @@
+{
+  "title": "A literal backslash does not consume the escape for an asterisk",
+  "rows": [{"number": 17, "title": "Keep `x` and \\* as text"}],
+  "expected": {
+    "sections": [["other", [17]]],
+    "markdown": ["\n- \\#17 — Keep \\`x\\` and \\\\\\* as text\n"]
+  }
+}
