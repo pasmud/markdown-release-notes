@@ -1,0 +1,12 @@
+{
+  "title": "Equivalent Unicode label sets and normalized titles deduplicate",
+  "reorder": true,
+  "rows": [
+    {"number": 43, "title": " Document\u00a0street\r\n previews ", "labels": ["Straße", "fix", "FIX"]},
+    {"number": 43, "title": "Document street previews", "labels": ["fix", "STRASSE"]}
+  ],
+  "expected": {
+    "sections": [["fix", [43]]],
+    "records": [{"number": 43, "title": "Document street previews", "url": null, "labels": ["fix", "strasse"]}]
+  }
+}
