@@ -1,11 +1,11 @@
 """Local release notes command line interface."""
 
 import argparse
-import json
 import sys
 from pathlib import Path
 
 from .export import parse_export
+from .input import load_json
 from .render import render_notes
 
 
@@ -18,9 +18,9 @@ def main(argv: list[str] | None = None) -> int:
     args = parser.parse_args(argv)
 
     try:
-        records = parse_export(json.loads(args.export.read_text(encoding="utf-8")))
+        records = parse_export(load_json(args.export))
     except (OSError, ValueError) as exc:
-        parser.exit(2, f"{parser.prog}: {args.export}: {exc}\n")
+        parser.exit(2, f"{parser.prog}: {str(args.export)!r}: {exc}\n")
 
-    sys.stdout.write(render_notes(records))
+    sys.stdout.buffer.write(render_notes(records).encode("utf-8"))
     return 0
