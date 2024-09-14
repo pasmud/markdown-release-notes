@@ -1,0 +1,8 @@
+{
+  "title": "Image syntax in a title renders as literal text",
+  "rows": [{"number": 32, "title": "Explain ![preview](https://example.invalid/demo.png)"}],
+  "expected": {
+    "sections": [["other", [32]]],
+    "markdown": ["\n- \\#32 — Explain \\!\\[preview\\]\\(https\\://example.invalid/demo.png\\)\n"]
+  }
+}
