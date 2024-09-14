@@ -1,0 +1,8 @@
+{
+  "title": "Unicode text survives beside an escaped ASCII hash",
+  "rows": [{"number": 66, "title": "Café — 「naïve」 … #样例"}],
+  "expected": {
+    "sections": [["other", [66]]],
+    "markdown": ["\n- \\#66 — Café — 「naïve」 … \\#样例\n"]
+  }
+}
