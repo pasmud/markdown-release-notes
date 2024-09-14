@@ -1,0 +1,11 @@
+{
+  "title": "Link query delimiters and title entities use different escapes",
+  "rows": [
+    {"number": 58, "title": "Show <hint> &copy;", "url": "https://example.invalid/a_(b)?raw=a%26b&copy;=yes#note"}
+  ],
+  "expected": {
+    "sections": [["other", [58]]],
+    "records": [{"number": 58, "title": "Show <hint> &copy;", "url": "https://example.invalid/a_(b)?raw=a%26b&copy;=yes#note", "labels": []}],
+    "markdown": ["\n- [#58](<https://example.invalid/a_(b)?raw=a%26b&amp;copy;=yes#note>) — Show \\<hint\\> \\&copy;\n"]
+  }
+}
