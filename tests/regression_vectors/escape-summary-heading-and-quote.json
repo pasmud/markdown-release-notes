@@ -1,0 +1,10 @@
+{
+  "title": "A multiline summary cannot introduce a heading or quote",
+  "metadata": {"summary": "\r\n ## Tips\n> Use [one] & two\t"},
+  "rows": [{"number": 46, "title": "Clarify installation steps"}],
+  "expected": {
+    "sections": [["other", [46]]],
+    "release": {"version": null, "date": null, "summary": "## Tips > Use [one] & two"},
+    "markdown": ["\nSummary: \\#\\# Tips \\> Use \\[one\\] \\& two\n\n## Other changes\n"]
+  }
+}
