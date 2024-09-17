@@ -14,7 +14,7 @@ def test_render_orders_by_number_and_escapes_titles_and_destinations():
         },
     ])
     assert render_notes(records) == (
-        "# Release notes\n\n"
+        "# Release notes\n\n## Other changes\n\n"
         "- [#10](<https://example.invalid/changes/(draft)?x=1&amp;copy;=2>)"
         " — Show \\*\\*preview\\*\\* for \\<draft\\> \\& \\[sample\\]\n"
         "- \\#2 — Tidy docs \\#\\# Heading\n"

@@ -4,7 +4,7 @@ import re
 from dataclasses import dataclass
 from urllib.parse import urlsplit
 
-from .input import normalize_text
+from .input import normalize_text, parse_labels
 
 _URL = re.compile(r"[a-zA-Z0-9._~:/?#@!$&'()*+,;=%-]+")
 _HOST_LABEL = r"[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?"
@@ -36,14 +36,6 @@ def _parse_url(value: object) -> str | None:
     return value
 
 
-def parse_labels(value: object) -> frozenset[str]:
-    if not isinstance(value, list):
-        raise ValueError("labels must be an array of non-empty strings")
-    return frozenset(
-        normalize_text(label, f"labels[{index}]").casefold() for index, label in enumerate(value)
-    )
-
-
 def parse_export(data: object) -> list[PullRequest]:
     if not isinstance(data, list):
         raise ValueError("expected an array of pull requests")
@@ -62,7 +54,7 @@ def parse_export(data: object) -> list[PullRequest]:
                 number=number,
                 title=normalize_text(row.get("title"), "title"),
                 url=_parse_url(row.get("url")),
-                labels=parse_labels(row.get("labels", [])),
+                labels=parse_labels(row.get("labels", []), "labels"),
             )
             if number in records and records[number] != record:
                 raise ValueError(f"conflicting records for PR #{number}")

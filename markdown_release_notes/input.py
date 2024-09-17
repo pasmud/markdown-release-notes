@@ -30,8 +30,16 @@ def load_json(path: Path) -> object:
 
 
 def normalize_text(value: object, field: str) -> str:
-    if not isinstance(value, str) or not value.split():
+    if not isinstance(value, str) or not (words := value.split()):
         raise ValueError(f"{field} must be a non-empty string")
     if any(ch not in "\t\r\n" and unicodedata.category(ch) in {"Cc", "Cs"} for ch in value):
         raise ValueError(f"{field} contains a control character or an unpaired surrogate")
-    return " ".join(value.split())
+    return " ".join(words)
+
+
+def parse_labels(value: object, field: str) -> frozenset[str]:
+    if not isinstance(value, list):
+        raise ValueError(f"{field} must be an array of non-empty strings")
+    return frozenset(
+        normalize_text(label, f"{field}[{index}]").casefold() for index, label in enumerate(value)
+    )
