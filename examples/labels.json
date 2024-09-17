@@ -1,0 +1,4 @@
+{
+  "breaking": ["change:incompatible"],
+  "feat": ["type:feature"]
+}
