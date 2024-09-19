@@ -1,0 +1,8 @@
+{
+  "title": "Pipes, tildes, and braces stay literal in a PR title",
+  "rows": [{"number": 22, "title": "Keep |col| and ~~old~~ {tag}", "labels": ["bugfix"]}],
+  "expected": {
+    "sections": [["fix", [22]]],
+    "markdown": ["\n- \\#22 — Keep \\|col\\| and \\~\\~old\\~\\~ \\{tag\\}\n"]
+  }
+}
