@@ -1,0 +1,8 @@
+{
+  "title": "Autolink and mention escapes cover mixed-case WWW",
+  "rows": [{"number": 14, "title": "Compare WwW.example.invalid, @reviewer, and HTTPS://example.invalid"}],
+  "expected": {
+    "sections": [["other", [14]]],
+    "markdown": ["\n- \\#14 — Compare WwW\\.example.invalid, \\@reviewer, and HTTPS\\://example.invalid\n"]
+  }
+}
