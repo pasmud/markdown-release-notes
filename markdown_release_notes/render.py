@@ -1,5 +1,6 @@
-"""Deterministic Markdown rendering for validated records."""
+"""Deterministic release notes rendering for validated records."""
 
+import json
 import re
 from collections.abc import Mapping
 
@@ -23,6 +24,19 @@ def _entry(record: PullRequest) -> str:
     return f"- {ref} — {_escape(record.title)}"
 
 
+def _group_records(
+    records: list[PullRequest], label_map: Mapping[str, frozenset[str]],
+) -> dict[str, list[PullRequest]]:
+    groups: dict[str, list[PullRequest]] = {key: [] for key, _ in SECTIONS}
+    for row in sorted(records, key=lambda row: row.number, reverse=True):
+        category = next(
+            (key for key, _ in SECTIONS if not row.labels.isdisjoint(label_map.get(key, ()))),
+            "other",
+        )
+        groups[category].append(row)
+    return groups
+
+
 def render_notes(
     records: list[PullRequest],
     release: Release = DEFAULT_RELEASE,
@@ -40,14 +54,41 @@ def render_notes(
             if no_matches else "No merged pull requests."
         )
     else:
-        groups: dict[str, list[str]] = {key: [] for key, _ in SECTIONS}
-        for row in sorted(records, key=lambda row: row.number, reverse=True):
-            category = next(
-                (key for key, _ in SECTIONS if not row.labels.isdisjoint(label_map.get(key, ()))),
-                "other",
-            )
-            groups[category].append(_entry(row))
+        groups = _group_records(records, label_map)
         blocks.extend(
-            f"## {title}\n\n" + "\n".join(groups[key]) for key, title in SECTIONS if groups[key]
+            f"## {title}\n\n" + "\n".join(_entry(row) for row in groups[key])
+            for key, title in SECTIONS if groups[key]
         )
     return "\n\n".join(blocks) + "\n"
+
+
+def render_json(
+    records: list[PullRequest],
+    release: Release = DEFAULT_RELEASE,
+    label_map: Mapping[str, frozenset[str]] = DEFAULT_LABELS,
+) -> str:
+    groups = _group_records(records, label_map)
+    document = {
+        "schema_version": 1,
+        "release": {
+            "version": release.version,
+            "date": release.released_on.isoformat() if release.released_on else None,
+        },
+        "sections": [
+            {
+                "id": key,
+                "title": title,
+                "pull_requests": [
+                    {
+                        "number": row.number,
+                        "title": row.title,
+                        "url": row.url,
+                        "labels": sorted(row.labels),
+                    }
+                    for row in groups[key]
+                ],
+            }
+            for key, title in SECTIONS if groups[key]
+        ],
+    }
+    return json.dumps(document, ensure_ascii=False, indent=2) + "\n"

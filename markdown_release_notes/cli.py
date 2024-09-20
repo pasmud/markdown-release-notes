@@ -7,13 +7,13 @@ from pathlib import Path
 from .export import parse_export
 from .input import load_json, parse_labels
 from .release import DEFAULT_LABELS, parse_label_map, parse_release
-from .render import render_notes
+from .render import render_json, render_notes
 
 
 def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(
         prog="markdown-release-notes",
-        description="Render Markdown from a local JSON export of merged pull requests.",
+        description="Render release notes from a local JSON export of merged pull requests.",
     )
     parser.add_argument("export", type=Path, help="UTF-8 JSON export file")
     parser.add_argument("--labels", type=Path, metavar="FILE", help="JSON label mapping overrides")
@@ -27,6 +27,10 @@ def main(argv: list[str] | None = None) -> int:
     )
     parser.add_argument("--version", help="release identifier to show in the heading")
     parser.add_argument("--date", metavar="YYYY-MM-DD", help="release date to show below the heading")
+    parser.add_argument(
+        "--format", choices=("markdown", "json"), default="markdown",
+        help="output format (default: markdown)",
+    )
     args = parser.parse_args(argv)
 
     try:
@@ -53,6 +57,9 @@ def main(argv: list[str] | None = None) -> int:
         if (not included or not record.labels.isdisjoint(included))
         and record.labels.isdisjoint(excluded)
     ]
-    notes = render_notes(selected, release, label_map, no_matches=bool(records) and not selected)
+    if args.format == "json":
+        notes = render_json(selected, release, label_map)
+    else:
+        notes = render_notes(selected, release, label_map, no_matches=bool(records) and not selected)
     sys.stdout.buffer.write(notes.encode("utf-8"))
     return 0

@@ -1,3 +1,4 @@
+import json
 import subprocess
 import sys
 from pathlib import Path
@@ -126,3 +127,73 @@ def test_filtering_does_not_hide_conflicting_rows(tmp_path):
     assert proc.returncode == 2
     assert proc.stdout == b""
     assert b"row 2: conflicting records for PR #1" in proc.stderr
+
+
+def test_json_output_has_stable_order_and_normalized_unescaped_values(tmp_path):
+    args = (
+        "--format", "json", "--labels", EXAMPLES / "labels.json",
+        "--version", "  v2 [demo] ", "--date", "2030-06-12", "--exclude-label", "docs",
+    )
+    export = EXAMPLES / "merged-prs.json"
+    proc = run_cli(export, *args)
+    assert proc.returncode == 0, proc.stderr
+    assert proc.stderr == b""
+    document = json.loads(proc.stdout.decode("utf-8"))
+    assert document == {
+        "schema_version": 1,
+        "release": {"version": "v2 [demo]", "date": "2030-06-12"},
+        "sections": [
+            {"id": "breaking", "title": "Breaking changes", "pull_requests": [{
+                "number": 208, "title": "Replace the legacy draft format",
+                "url": "https://example.invalid/demo/pulls/208",
+                "labels": ["change:incompatible", "type:feature"],
+            }]},
+            {"id": "feat", "title": "Features", "pull_requests": [
+                {
+                    "number": 209, "title": "Show café previews for [drafts] & templates",
+                    "url": "https://example.invalid/demo/pulls/209?mode=preview&tab=summary",
+                    "labels": ["bugfix", "type:feature"],
+                },
+                {"number": 206, "title": "Add a compact summary", "url": None, "labels": ["type:feature"]},
+            ]},
+            {"id": "fix", "title": "Fixes", "pull_requests": [{
+                "number": 207, "title": "Keep blank lines in copied notes",
+                "url": "https://example.invalid/demo/pulls/207", "labels": ["bugfix"],
+            }]},
+        ],
+    }
+    assert "café".encode() in proc.stdout
+    assert proc.stdout.endswith(b"\n")
+
+    rows = json.loads(export.read_text(encoding="utf-8"))
+    for row in rows:
+        row["labels"].reverse()
+    reordered = tmp_path / "reordered.json"
+    reordered.write_text(json.dumps(rows[::-1]), encoding="utf-8")
+    repeat = run_cli(reordered, *args)
+    assert repeat.returncode == 0, repeat.stderr
+    assert repeat.stdout == proc.stdout
+
+
+def test_json_output_can_have_no_sections():
+    proc = run_cli(EXAMPLES / "merged-prs.json", "--format", "json", "--include-label", "unmatched")
+    assert proc.returncode == 0, proc.stderr
+    assert json.loads(proc.stdout) == {
+        "schema_version": 1, "release": {"version": None, "date": None}, "sections": [],
+    }
+
+
+def test_json_format_still_validates_the_entire_export(tmp_path):
+    export = tmp_path / "invalid.json"
+    export.write_text('[{"number": 1, "title": "Example", "url": "http://example.invalid"}]', encoding="utf-8")
+    proc = run_cli(export, "--format", "json", "--include-label", "unmatched")
+    assert proc.returncode == 2
+    assert proc.stdout == b""
+    assert b"row 1: url must be an absolute HTTPS URL" in proc.stderr
+
+
+def test_unknown_output_format_is_a_usage_error():
+    proc = run_cli(EXAMPLES / "merged-prs.json", "--format", "yaml")
+    assert proc.returncode == 2
+    assert proc.stdout == b""
+    assert b"argument --format: invalid choice" in proc.stderr

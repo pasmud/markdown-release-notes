@@ -64,10 +64,32 @@ Filters match actual PR labels with whitespace collapsed and case ignored, regar
 
 - `--version VALUE` sets the heading to `Release VALUE`; it can be any non-empty identifier, not necessarily SemVer. With no version, the heading is `Release notes`.
 - `--date YYYY-MM-DD` adds a release date below the heading. Invalid calendar dates are rejected; no date is inferred.
-- Successful runs exit `0` and write UTF-8 Markdown with LF line endings to stdout. An empty export prints `No merged pull requests.` beneath the heading. Use shell redirection if you need a file.
-- Invalid arguments, unreadable input files, invalid JSON, and invalid records exit `2` with a diagnostic on stderr and no Markdown on stdout. Record diagnostics identify the one-based row number. `--help` shows the CLI usage.
+- Successful runs exit `0` and write UTF-8 output with LF line endings to stdout. The default is `--format markdown`; in Markdown an empty export prints `No merged pull requests.` beneath the heading. Use shell redirection if you need a file.
+- Invalid arguments, unreadable input files, invalid JSON, and invalid records exit `2` with a diagnostic on stderr and nothing on stdout. Record diagnostics identify the one-based row number. `--help` shows the CLI usage.
 
 Titles and versions are escaped as Markdown text. Link destinations accept ASCII HTTPS URLs with DNS-style hostnames and optional ports, with no credentials, whitespace, unsafe delimiters, or malformed escapes. A rejected URL fails validation; use `null` for a PR without a usable link. The CLI validates link syntax only; use sanitized links you trust, since it does not verify destinations or follow redirects.
+
+### Grouped JSON
+
+Use `--format json` for machine-readable output. It uses the same validated records, filters, category priority, and descending PR order as Markdown. Schema version `1` emits one document:
+
+```json
+{
+  "schema_version": 1,
+  "release": {"version": null, "date": null},
+  "sections": [
+    {
+      "id": "feat",
+      "title": "Features",
+      "pull_requests": [
+        {"number": 12, "title": "Add sample previews", "url": null, "labels": ["feature"]}
+      ]
+    }
+  ]
+}
+```
+
+Section IDs are `breaking`, `feat`, `fix`, and `other`. Empty sections are omitted, so an empty selection produces `"sections": []`. Missing metadata and URLs are `null`; labels are normalized and sorted. Text is JSON-encoded without Markdown escaping.
 
 ## Development
 
