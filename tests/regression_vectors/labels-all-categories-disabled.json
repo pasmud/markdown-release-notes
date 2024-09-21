@@ -1,0 +1,10 @@
+{
+  "title": "Disabling every category leaves one ordered fallback group",
+  "label_map": {"breaking": [], "feat": [], "fix": []},
+  "rows": [
+    {"number": 12, "title": "Replace the old layout", "labels": ["breaking", "feat", "fix"]},
+    {"number": 16, "title": "Document the layout"},
+    {"number": 14, "title": "Keep the layout stable", "labels": []}
+  ],
+  "expected": {"sections": [["other", [16, 14, 12]]]}
+}
