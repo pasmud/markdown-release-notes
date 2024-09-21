@@ -1,0 +1,10 @@
+{
+  "title": "Version punctuation is escaped in Markdown but preserved in JSON",
+  "metadata": {"version": " v3_[trial] #hot! "},
+  "rows": [{"number": 25, "title": "Start the trial release", "labels": ["feat"]}],
+  "expected": {
+    "sections": [["feat", [25]]],
+    "release": {"version": "v3_[trial] #hot!", "date": null},
+    "markdown": ["# Release v3\\_\\[trial\\] \\#hot\\!\n\n## Features\n"]
+  }
+}
