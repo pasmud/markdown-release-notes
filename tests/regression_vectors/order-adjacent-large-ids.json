@@ -1,0 +1,8 @@
+{
+  "title": "Adjacent IDs above the float precision limit stay distinct",
+  "rows": [
+    {"number": 9007199254740992, "title": "Repair the large-ID example", "labels": ["fix"]},
+    {"number": 9007199254740993, "title": "Repair the large-ID table", "labels": ["fix"]}
+  ],
+  "expected": {"sections": [["fix", [9007199254740993, 9007199254740992]]]}
+}
