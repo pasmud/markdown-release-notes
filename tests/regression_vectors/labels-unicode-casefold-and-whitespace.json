@@ -1,0 +1,9 @@
+{
+  "title": "Configured labels match Unicode casefolding and collapsed spaces",
+  "label_map": {"feat": [" Straße\tPreview "]},
+  "rows": [
+    {"number": 61, "title": "Add a street preview", "labels": ["STRASSE\u00a0PREVIEW"]},
+    {"number": 62, "title": "Document plural street previews", "labels": ["STRASSE PREVIEWS"]}
+  ],
+  "expected": {"sections": [["feat", [61]], ["other", [62]]]}
+}
