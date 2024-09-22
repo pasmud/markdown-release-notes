@@ -1,0 +1,9 @@
+{
+  "title": "Default aliases do not match longer or namespaced labels",
+  "rows": [
+    {"number": 43, "title": "Discuss a feature request", "labels": ["feature request"]},
+    {"number": 42, "title": "Document a typed fix label", "labels": ["type:fix"]},
+    {"number": 41, "title": "Refine the sample output", "labels": ["enhancement"]}
+  ],
+  "expected": {"sections": [["feat", [41]], ["other", [43, 42]]]}
+}
