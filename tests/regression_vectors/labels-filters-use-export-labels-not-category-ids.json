@@ -1,0 +1,10 @@
+{
+  "title": "A category ID in a filter matches only literal export labels",
+  "label_map": {"feat": ["type:addition"]},
+  "args": ["--include-label", "feat"],
+  "rows": [
+    {"number": 91, "title": "Add a compact mode", "labels": ["type:addition"]},
+    {"number": 92, "title": "Document the legacy feature tag", "labels": ["feat"]}
+  ],
+  "expected": {"sections": [["other", [92]]]}
+}
