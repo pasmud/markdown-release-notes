@@ -1,0 +1,10 @@
+{
+  "title": "A feature override removes old synonyms rather than adding to them",
+  "label_map": {"feat": ["product:launch"]},
+  "rows": [
+    {"number": 33, "title": "Improve the old panel", "labels": ["enhancement"]},
+    {"number": 34, "title": "Launch the new panel", "labels": ["product:launch"]},
+    {"number": 37, "title": "Repair the panel footer", "labels": ["bug"]}
+  ],
+  "expected": {"sections": [["feat", [34]], ["fix", [37]], ["other", [33]]]}
+}
