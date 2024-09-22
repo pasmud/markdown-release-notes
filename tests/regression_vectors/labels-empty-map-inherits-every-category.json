@@ -1,0 +1,10 @@
+{
+  "title": "An explicit empty map still inherits every default category",
+  "label_map": {},
+  "rows": [
+    {"number": 27, "title": "Fix example links", "labels": ["bugfix"]},
+    {"number": 29, "title": "Add example variants", "labels": ["feature"]},
+    {"number": 28, "title": "Replace the example format", "labels": ["breaking-change"]}
+  ],
+  "expected": {"sections": [["breaking", [28]], ["feat", [29]], ["fix", [27]]]}
+}
