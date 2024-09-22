@@ -1,0 +1,10 @@
+{
+  "title": "A disabled category's former alias can be reassigned to Fixes",
+  "label_map": {"fix": ["breaking change"], "breaking": []},
+  "rows": [
+    {"number": 63, "title": "Rework the cache sample", "labels": ["breaking change"]},
+    {"number": 65, "title": "Correct a legacy sample", "labels": ["bugfix"]},
+    {"number": 62, "title": "Explain old cache settings", "labels": ["breaking"]}
+  ],
+  "expected": {"sections": [["fix", [63]], ["other", [65, 62]]]}
+}
