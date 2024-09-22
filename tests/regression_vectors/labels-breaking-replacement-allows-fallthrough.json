@@ -1,0 +1,9 @@
+{
+  "title": "Replacing breaking aliases lets a default fix label win",
+  "label_map": {"breaking": ["incompatible"]},
+  "rows": [
+    {"number": 51, "title": "Correct the compatibility example", "labels": ["breaking", "fix"]},
+    {"number": 53, "title": "Remove an obsolete settings key", "labels": ["incompatible", "fix"]}
+  ],
+  "expected": {"sections": [["breaking", [53]], ["fix", [51]]]}
+}
