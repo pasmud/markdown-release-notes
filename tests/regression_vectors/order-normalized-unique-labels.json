@@ -1,0 +1,11 @@
+{
+  "title": "JSON sorts normalized labels regardless of their export order",
+  "reorder": true,
+  "rows": [
+    {"number": 64, "title": "Explain export presets", "labels": [" Zeta ", "Review\tNeeded", " FEAT", "zeta", "alpha"]}
+  ],
+  "expected": {
+    "sections": [["feat", [64]]],
+    "records": [{"number": 64, "title": "Explain export presets", "url": null, "labels": ["alpha", "feat", "review needed", "zeta"]}]
+  }
+}
