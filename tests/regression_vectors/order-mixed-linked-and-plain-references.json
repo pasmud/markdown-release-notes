@@ -1,0 +1,12 @@
+{
+  "title": "Linked and plain PR references interleave by number",
+  "rows": [
+    {"number": 73, "title": "Link the import guide", "url": "https://example.invalid/pulls/73", "labels": ["docs"]},
+    {"number": 77, "title": "Expand the import overview"},
+    {"number": 70, "title": "Correct an import example", "url": null}
+  ],
+  "expected": {
+    "sections": [["other", [77, 73, 70]]],
+    "markdown": ["- \\#77 — Expand the import overview\n- [#73](<https://example.invalid/pulls/73>) — Link the import guide\n- \\#70 — Correct an import example\n"]
+  }
+}
