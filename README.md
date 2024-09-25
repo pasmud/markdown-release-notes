@@ -15,6 +15,8 @@ python -m markdown_release_notes examples/merged-prs.json \
 
 See the [export](examples/merged-prs.json), [label overrides](examples/labels.json), and [expected Markdown](examples/release-notes.md). The example includes overlapping labels, an equivalent duplicate, a PR without a link, and punctuation rendered as literal text.
 
+To install the `markdown-release-notes` command into an active virtual environment, run `python -m pip install .` from the repository root. Use the same arguments as above with `markdown-release-notes` in place of `python -m markdown_release_notes`.
+
 ## Export format
 
 Supply a UTF-8 JSON array of already-merged PRs. This is a narrow schema for sanitized data, not the raw response from a hosting API. Filter for merged PRs and keep only these fields before running the tool:
@@ -55,3 +57,15 @@ Each PR goes in the first matching category below. Unlabeled or unmatched PRs go
 - Invalid arguments, unreadable input files, invalid JSON, and invalid records exit `2` with a diagnostic on stderr and no Markdown on stdout. Record diagnostics identify the one-based row number. `--help` shows the CLI usage.
 
 Titles and versions are escaped as Markdown text. Link destinations accept ASCII HTTPS URLs with DNS-style hostnames and optional ports, with no credentials, whitespace, unsafe delimiters, or malformed escapes. A rejected URL fails validation; use `null` for a PR without a usable link. The CLI validates link syntax only; use sanitized links you trust, since it does not verify destinations or follow redirects.
+
+## Development
+
+In a virtual environment, install the test extra and run:
+
+```sh
+python -m pip install '.[test]'
+python -m ruff check .
+python -m pytest -q
+```
+
+Licensed under the [MIT License](LICENSE).
