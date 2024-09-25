@@ -1,0 +1,9 @@
+{
+  "title": "Alphabetical titles do not override descending PR IDs",
+  "rows": [
+    {"number": 34, "title": "Archive panel examples"},
+    {"number": 31, "title": "Zoom panel diagrams"},
+    {"number": 37, "title": "Middle panel layout"}
+  ],
+  "expected": {"sections": [["other", [37, 34, 31]]]}
+}
