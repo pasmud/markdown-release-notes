@@ -197,3 +197,71 @@ def test_unknown_output_format_is_a_usage_error():
     assert proc.returncode == 2
     assert proc.stdout == b""
     assert b"argument --format: invalid choice" in proc.stderr
+
+
+@pytest.fixture
+def metadata_file(tmp_path):
+    metadata = tmp_path / "release.json"
+    metadata.write_text(json.dumps({
+        "version": " v2 [demo] ", "date": "2030-06-12",
+        "summary": "  1. Preview **drafts**\n<sample> & templates  ",
+    }), encoding="utf-8")
+    return metadata
+
+
+@pytest.mark.parametrize(("overrides", "expected_date"), [
+    ((), "2030-06-12"),
+    (("--date", "2030-06-13"), "2030-06-13"),
+])
+def test_metadata_file_renders_a_literal_markdown_summary(metadata_file, overrides, expected_date):
+    proc = run_cli(EXAMPLES / "merged-prs.json", "--metadata", metadata_file, *overrides)
+    assert proc.returncode == 0, proc.stderr
+    assert proc.stdout.decode().startswith(
+        f"# Release v2 \\[demo\\]\n\nReleased: {expected_date}\n\n"
+        "Summary: 1. Preview \\*\\*drafts\\*\\* \\<sample\\> \\& templates\n\n"
+        "## Fixes\n"
+    )
+
+
+def test_json_includes_metadata_summary_and_honors_version_override(metadata_file):
+    proc = run_cli(
+        EXAMPLES / "merged-prs.json", "--metadata", metadata_file,
+        "--version", "canary", "--format", "json",
+    )
+    assert proc.returncode == 0, proc.stderr
+    assert json.loads(proc.stdout)["release"] == {
+        "version": "canary", "date": "2030-06-12", "summary": "1. Preview **drafts** <sample> & templates",
+    }
+
+
+def test_summary_can_annotate_a_release_without_prs_or_other_metadata(tmp_path):
+    export = tmp_path / "export.json"
+    export.write_text("[]", encoding="utf-8")
+    metadata = tmp_path / "release.json"
+    metadata.write_text('{"summary": "Documentation-only release."}', encoding="utf-8")
+    proc = run_cli(export, "--metadata", metadata)
+    assert proc.returncode == 0, proc.stderr
+    assert proc.stdout == (
+        b"# Release notes\n\nSummary: Documentation-only release.\n\nNo merged pull requests.\n"
+    )
+
+
+@pytest.mark.parametrize(("content", "diagnostic"), [
+    ("[]", b"expected a release metadata object"),
+    ('{"title": "Release"}', b"unknown metadata fields: 'title'"),
+    ('{"date": 20300612}', b"date must be a string"),
+    ('{"date": "2030-02-30"}', b"date must be a valid calendar date"),
+    ('{"summary": " "}', b"summary must be a non-empty string"),
+    ('{"version": "preview", "version": "stable"}', b"duplicate JSON key 'version'"),
+])
+def test_invalid_metadata_names_the_file_even_with_a_cli_date_override(tmp_path, content, diagnostic):
+    metadata = tmp_path / "bad-metadata.json"
+    metadata.write_text(content, encoding="utf-8")
+    proc = run_cli(
+        EXAMPLES / "merged-prs.json", "--metadata", metadata, "--date", "2030-06-12", "--format", "json",
+    )
+    assert proc.returncode == 2
+    assert proc.stdout == b""
+    assert b"bad-metadata.json" in proc.stderr
+    assert diagnostic in proc.stderr
+    assert b"Traceback" not in proc.stderr

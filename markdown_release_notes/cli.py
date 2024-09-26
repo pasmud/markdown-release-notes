@@ -6,7 +6,13 @@ from pathlib import Path
 
 from .export import parse_export
 from .input import load_json, parse_labels
-from .release import DEFAULT_LABELS, parse_label_map, parse_release
+from .release import (
+    DEFAULT_LABELS,
+    Release,
+    parse_label_map,
+    parse_metadata,
+    parse_release,
+)
 from .render import render_json, render_notes
 
 
@@ -28,6 +34,9 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument("--version", help="release identifier to show in the heading")
     parser.add_argument("--date", metavar="YYYY-MM-DD", help="release date to show below the heading")
     parser.add_argument(
+        "--metadata", type=Path, metavar="FILE", help="JSON release metadata and summary",
+    )
+    parser.add_argument(
         "--format", choices=("markdown", "json"), default="markdown",
         help="output format (default: markdown)",
     )
@@ -39,6 +48,17 @@ def main(argv: list[str] | None = None) -> int:
         excluded = parse_labels(args.exclude_label, "--exclude-label")
     except ValueError as exc:
         parser.error(str(exc))
+
+    if args.metadata is not None:
+        try:
+            metadata = parse_metadata(load_json(args.metadata))
+        except (OSError, ValueError) as exc:
+            parser.exit(2, f"{parser.prog}: {str(args.metadata)!r}: {exc}\n")
+        release = Release(
+            version=release.version or metadata.version,
+            released_on=release.released_on or metadata.released_on,
+            summary=metadata.summary,
+        )
 
     label_map = DEFAULT_LABELS
     if args.labels is not None:

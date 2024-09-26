@@ -60,6 +60,24 @@ python -m markdown_release_notes examples/merged-prs.json \
 
 Filters match actual PR labels with whitespace collapsed and case ignored, regardless of the category mapping. The entire export is validated and deduplicated before filtering. If filters remove every PR from a non-empty export, Markdown prints `No merged pull requests matched the label filters.`
 
+## Release metadata and summary
+
+To reuse release details across runs, save a UTF-8 JSON file such as `release.json`:
+
+```json
+{
+  "version": "v2.4.0-demo",
+  "date": "2030-06-12",
+  "summary": "This release adds café previews for drafts and templates."
+}
+```
+
+```sh
+python -m markdown_release_notes examples/merged-prs.json --metadata release.json
+```
+
+The three fields are optional; if present they must be non-empty strings, with `date` in `YYYY-MM-DD` format. Unknown fields and duplicate keys are errors. `--version` and `--date` override their respective file values after the file is validated. The summary is collapsed to one line and shown as plain text in a `Summary:` paragraph before the PR sections.
+
 ## CLI output and errors
 
 - `--version VALUE` sets the heading to `Release VALUE`; it can be any non-empty identifier, not necessarily SemVer. With no version, the heading is `Release notes`.
@@ -89,7 +107,7 @@ Use `--format json` for machine-readable output. It uses the same validated reco
 }
 ```
 
-Section IDs are `breaking`, `feat`, `fix`, and `other`. Empty sections are omitted, so an empty selection produces `"sections": []`. Missing metadata and URLs are `null`; labels are normalized and sorted. Text is JSON-encoded without Markdown escaping.
+Section IDs are `breaking`, `feat`, `fix`, and `other`. Empty sections are omitted, so an empty selection produces `"sections": []`. Missing versions, dates, and URLs are `null`; `release.summary` is included only when supplied. Labels are normalized and sorted. Text is JSON-encoded without Markdown escaping.
 
 ## Development
 

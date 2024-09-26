@@ -48,6 +48,8 @@ def render_notes(
     blocks = [f"# {heading}"]
     if release.released_on:
         blocks.append(f"Released: {release.released_on.isoformat()}")
+    if release.summary is not None:
+        blocks.append(f"Summary: {_escape(release.summary)}")
     if not records:
         blocks.append(
             "No merged pull requests matched the label filters."
@@ -68,12 +70,15 @@ def render_json(
     label_map: Mapping[str, frozenset[str]] = DEFAULT_LABELS,
 ) -> str:
     groups = _group_records(records, label_map)
+    metadata = {
+        "version": release.version,
+        "date": release.released_on.isoformat() if release.released_on else None,
+    }
+    if release.summary is not None:
+        metadata["summary"] = release.summary
     document = {
         "schema_version": 1,
-        "release": {
-            "version": release.version,
-            "date": release.released_on.isoformat() if release.released_on else None,
-        },
+        "release": metadata,
         "sections": [
             {
                 "id": key,

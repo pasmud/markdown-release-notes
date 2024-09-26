@@ -30,15 +30,19 @@ def parse_label_map(data: object) -> dict[str, frozenset[str]]:
 class Release:
     version: str | None = None
     released_on: date | None = None
+    summary: str | None = None
 
 
 DEFAULT_RELEASE = Release()
 
 
-def parse_release(version: str | None, release_date: str | None) -> Release:
+def parse_release(
+    version: str | None, release_date: str | None, *, summary: str | None = None,
+) -> Release:
     version = normalize_text(version, "version") if version is not None else None
+    summary = normalize_text(summary, "summary") if summary is not None else None
     if release_date is None:
-        return Release(version)
+        return Release(version, summary=summary)
     message = "date must be a valid calendar date in YYYY-MM-DD format"
     try:
         parsed = date.fromisoformat(release_date)
@@ -46,4 +50,15 @@ def parse_release(version: str | None, release_date: str | None) -> Release:
         raise ValueError(message) from exc
     if parsed.isoformat() != release_date:
         raise ValueError(message)
-    return Release(version, parsed)
+    return Release(version, parsed, summary)
+
+
+def parse_metadata(data: object) -> Release:
+    if not isinstance(data, dict):
+        raise ValueError("expected a release metadata object")
+    if unknown := data.keys() - {"version", "date", "summary"}:
+        raise ValueError(f"unknown metadata fields: {', '.join(map(repr, sorted(unknown)))}")
+    for key, value in data.items():
+        if not isinstance(value, str):
+            raise ValueError(f"{key} must be a string")
+    return parse_release(data.get("version"), data.get("date"), summary=data.get("summary"))
