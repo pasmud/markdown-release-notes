@@ -1,0 +1,10 @@
+{
+  "title": "PR IDs sort numerically across digit widths",
+  "reorder": true,
+  "rows": [
+    {"number": 10, "title": "Add a compact badge", "labels": ["feat"]},
+    {"number": 2, "title": "Add a badge legend", "labels": ["feat"]},
+    {"number": 100, "title": "Add badge previews", "labels": ["feat"]}
+  ],
+  "expected": {"sections": [["feat", [100, 10, 2]]]}
+}
