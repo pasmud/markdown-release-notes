@@ -1,0 +1,14 @@
+{
+  "title": "Section priority is independent of the highest ID in each group",
+  "reorder": true,
+  "rows": [
+    {"number": 54, "title": "Fix preview import", "labels": ["fix"]},
+    {"number": 73, "title": "Document preview import"},
+    {"number": 6, "title": "Remove legacy preview flags", "labels": ["breaking"]},
+    {"number": 31, "title": "Add preview presets", "labels": ["feat"]}
+  ],
+  "expected": {
+    "sections": [["breaking", [6]], ["feat", [31]], ["fix", [54]], ["other", [73]]],
+    "markdown": ["## Breaking changes\n\n- \\#6 — Remove legacy preview flags\n\n## Features\n\n- \\#31 — Add preview presets\n\n## Fixes\n\n- \\#54 — Fix preview import\n\n## Other changes\n\n- \\#73 — Document preview import\n"]
+  }
+}
