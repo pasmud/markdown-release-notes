@@ -1,0 +1,11 @@
+{
+  "title": "Missing middle sections do not leave empty Markdown headings",
+  "rows": [
+    {"number": 19, "title": "Update migration diagrams", "labels": ["docs"]},
+    {"number": 10, "title": "Remove the old migration flag", "labels": ["breaking"]}
+  ],
+  "expected": {
+    "sections": [["breaking", [10]], ["other", [19]]],
+    "markdown": ["## Breaking changes\n\n- \\#10 — Remove the old migration flag\n\n## Other changes\n\n- \\#19 — Update migration diagrams\n"]
+  }
+}
