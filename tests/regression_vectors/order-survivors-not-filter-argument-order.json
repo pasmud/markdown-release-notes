@@ -1,0 +1,12 @@
+{
+  "title": "Multiple include flags do not determine order within a group",
+  "args": ["--include-label", "batch-a", "--include-label", "batch-b"],
+  "reorder": true,
+  "rows": [
+    {"number": 25, "title": "Repair the list counter", "labels": ["batch-a", "bugfix"]},
+    {"number": 40, "title": "Repair list navigation", "labels": ["batch-c", "bugfix"]},
+    {"number": 33, "title": "Repair list pagination", "labels": ["bugfix", "batch-b"]},
+    {"number": 19, "title": "Repair list highlighting", "labels": ["batch-b", "batch-a", "bugfix"]}
+  ],
+  "expected": {"sections": [["fix", [33, 25, 19]]]}
+}
