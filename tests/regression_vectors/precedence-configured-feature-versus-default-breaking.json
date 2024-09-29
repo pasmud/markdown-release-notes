@@ -1,0 +1,9 @@
+{
+  "title": "An omitted breaking override still outranks a custom feature",
+  "label_map": {"feat": ["type:addition"]},
+  "rows": [
+    {"number": 51, "title": "Replace the palette API", "labels": ["type:addition", "breaking"]},
+    {"number": 52, "title": "Add a palette preset", "labels": ["type:addition"]}
+  ],
+  "expected": {"sections": [["breaking", [51]], ["feat", [52]]]}
+}
