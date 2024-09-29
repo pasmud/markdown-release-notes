@@ -1,0 +1,8 @@
+{
+  "title": "A normalized breaking alias outranks a feature label",
+  "rows": [
+    {"number": 28, "title": "Revise theme configuration", "labels": ["feature", "\tBREAKING\nChange "]},
+    {"number": 29, "title": "Add a sample theme", "labels": ["feature"]}
+  ],
+  "expected": {"sections": [["breaking", [28]], ["feat", [29]]]}
+}
