@@ -1,0 +1,10 @@
+{
+  "title": "An excluded lower-priority label removes the whole PR",
+  "args": ["--include-label", "breaking", "--exclude-label", "bug"],
+  "rows": [
+    {"number": 111, "title": "Remove the old draft API", "labels": ["breaking", "bug"]},
+    {"number": 112, "title": "Replace the draft identifier", "labels": ["breaking"]},
+    {"number": 113, "title": "Add draft previews", "labels": ["feat"]}
+  ],
+  "expected": {"sections": [["breaking", [112]]]}
+}
