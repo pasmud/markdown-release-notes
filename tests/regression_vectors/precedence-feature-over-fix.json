@@ -1,0 +1,8 @@
+{
+  "title": "A default enhancement outranks an explicit fix label",
+  "rows": [
+    {"number": 42, "title": "Add retry controls", "labels": ["fix", "enhancement"]},
+    {"number": 26, "title": "Repair retry counters", "labels": ["fix"]}
+  ],
+  "expected": {"sections": [["feat", [42]], ["fix", [26]]]}
+}
