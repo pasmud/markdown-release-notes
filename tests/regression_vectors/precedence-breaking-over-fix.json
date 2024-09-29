@@ -1,0 +1,8 @@
+{
+  "title": "Default breaking alias wins over a fix listed first",
+  "rows": [
+    {"number": 18, "title": "Replace cache format", "labels": ["bug", "breaking-change"]},
+    {"number": 23, "title": "Repair cache counters", "labels": ["bug"]}
+  ],
+  "expected": {"sections": [["breaking", [18]], ["fix", [23]]]}
+}
