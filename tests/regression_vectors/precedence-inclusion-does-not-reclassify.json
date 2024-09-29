@@ -1,0 +1,10 @@
+{
+  "title": "A fix inclusion filter does not strip the winning feature label",
+  "args": ["--include-label", " BUGFIX "],
+  "rows": [
+    {"number": 81, "title": "Add a safer import mode", "labels": ["bugfix", "feat"]},
+    {"number": 83, "title": "Add import shortcuts", "labels": ["feat"]},
+    {"number": 79, "title": "Repair import totals", "labels": ["bugfix"]}
+  ],
+  "expected": {"sections": [["feat", [81]], ["fix", [79]]]}
+}
