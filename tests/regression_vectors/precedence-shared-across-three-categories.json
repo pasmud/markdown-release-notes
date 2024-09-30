@@ -1,0 +1,10 @@
+{
+  "title": "An alias shared by all categories belongs only to breaking",
+  "label_map": {"fix": ["change", "repair"], "feat": [" CHANGE ", "add"], "breaking": ["Change"]},
+  "rows": [
+    {"number": 70, "title": "Replace the history format", "labels": ["change"]},
+    {"number": 62, "title": "Add history previews", "labels": ["add"]},
+    {"number": 82, "title": "Repair history pagination", "labels": ["repair"]}
+  ],
+  "expected": {"sections": [["breaking", [70]], ["feat", [62]], ["fix", [82]]]}
+}
