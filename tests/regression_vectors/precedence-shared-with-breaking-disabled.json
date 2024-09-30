@@ -1,0 +1,9 @@
+{
+  "title": "Disabling breaking leaves a shared alias in features",
+  "label_map": {"fix": ["visible"], "breaking": [], "feat": ["visible"]},
+  "rows": [
+    {"number": 12, "title": "Show a compact timeline", "labels": ["breaking", "visible"]},
+    {"number": 13, "title": "Retire a timeline setting", "labels": ["breaking"]}
+  ],
+  "expected": {"sections": [["feat", [12]], ["other", [13]]]}
+}
